@@ -1,9 +1,8 @@
-# lifesim: a C implementation of Conway's Game of Life
+# lifesim: Conway's Game of Life
 
 *Development of this project is somewhat active and maintained. Feel free to open an issue for any questions or suggestions.*
 
-LifeSim implements Conway's Game of Life in C using NCurses for
-visualization.
+LifeSim implements Conway's Game of Life in C using Raylib.
 
 Conway's Game of Life is a classic cellular automaton devised by mathematician
 [John Conway](https://simple.wikipedia.org/wiki/John_Horton_Conway). It
@@ -29,7 +28,7 @@ make -B
 
 As of now, configuration is done in [config.def.h](src/config.def.h), where you
 can change:
-  - grid size (default configuration is 20x20)
+  - grid size (default configuration is 50x50)
   - window resolution (default configuration is 800x800)
   - default speed (default is 1.0x)
 
