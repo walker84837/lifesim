@@ -1,7 +1,7 @@
 # Compiler settings
 CC = gcc
-CFLAGS = -march=native -mtune=native -Ofast -flto=auto
-LDFLAGS = -lncurses
+CFLAGS = -march=native -mtune=native -O2 -flto=auto
+LDFLAGS = -lraylib
 
 # Source and header files
 SRCS = $(wildcard src/*.c)

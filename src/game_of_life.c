@@ -1,5 +1,5 @@
-#include <ncurses.h>
 #include <stdlib.h>
+#include <raylib.h>
 #include "config.def.h"
 
 void randomize_grid(int grid[GRID_SIZE][GRID_SIZE])
@@ -13,9 +13,16 @@ void randomize_grid(int grid[GRID_SIZE][GRID_SIZE])
 
 void display_grid(int grid[GRID_SIZE][GRID_SIZE])
 {
+	int cellWidth = SCREEN_WIDTH / GRID_SIZE;
+	int cellHeight = SCREEN_HEIGHT / GRID_SIZE;
+
 	for (int i = 0; i < GRID_SIZE; ++i) {
 		for (int j = 0; j < GRID_SIZE; ++j) {
-			mvprintw(i, j, grid[i][j] == 1 ? "*" : " ");
+			if (grid[i][j] == 1) {
+				DrawRectangle(j * cellWidth, i * cellHeight, cellWidth, cellHeight, BLACK);
+			} else {
+				DrawRectangleLines(j * cellWidth, i * cellHeight, cellWidth, cellHeight, DARKGRAY);
+			}
 		}
 	}
 }
@@ -68,4 +75,3 @@ int all_cells_dead(int grid[GRID_SIZE][GRID_SIZE])
 	}
 	return 1;
 }
-

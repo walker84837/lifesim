@@ -1,10 +1,8 @@
 #include <stdio.h>
 #include <time.h>
-#include <string.h>
-#include <unistd.h>
-#include <getopt.h>
-#include <ncurses.h>
 #include <stdlib.h>
+#include <getopt.h>
+#include "raylib.h"
 #include "game_of_life.h"
 #include "config.def.h"
 
@@ -21,48 +19,45 @@ int main(int argc, char **argv)
 
 	int grid[GRID_SIZE][GRID_SIZE];
 	int steps;
-	int ch;
 
 	srand(time(NULL));
 	randomize_grid(grid);
 
-	initscr();
-	cbreak();
-	noecho();
-	curs_set(FALSE);
-	nodelay(stdscr, TRUE);
+	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "LifeSim: Conway's Game of Life");
 
-	for (steps = 0;; ++steps) {
-		clear();
+	SetTargetFPS((int)(config.speed * 3.6));
+
+	while (!WindowShouldClose()) {
+		BeginDrawing();
+		ClearBackground(RAYWHITE);
+
 		display_grid(grid);
-		refresh();
-
-		if ((ch = getch()) == 'q') {
-			break;
-		}
 
 		if (all_cells_dead(grid)) {
 			break;
 		}
 
 		update_grid(grid);
-		usleep((int)(1000000 / config.speed));
+
+		EndDrawing();
 	}
 
-	endwin();
+	CloseWindow();
 	return 0;
+}
+
+void print_usage()
+{
+	fprintf(stderr, "Usage: lifesim [-s <speed>] \n");
+	fputs("  --speed, -s  The speed of the simulation of Conway's Game of Life (1x, 2.5x, ...)\n", stderr);
+	exit(EXIT_FAILURE);
 }
 
 void process_input(int argc, char *argv[], args_t *config)
 {
-	if (argc == 1) {
-		goto help;
-	}
-
 	int opt;
 	static struct option long_options[] = {
 		{"speed", required_argument, 0, 's'},
-		// {"some_other_option", required_argument, 0, 'o'},
 		{0, 0, 0, 0}
 	};
 
@@ -76,15 +71,13 @@ void process_input(int argc, char *argv[], args_t *config)
 				}
 				break;
 			case 'h':
-				goto help;
-				break;
+				print_usage();
 			default:
-				goto help;
+				print_usage();
 		}
 	}
 
-help:
-	fprintf(stderr, "Usage: %s [-s <speed>] \n", argv[0]);
-	fputs("  --speed, -s  The speed of the simulation of Conway's Game of Life (1x, 2.5x, ...)\n", stderr);
-	exit(EXIT_FAILURE);
+	if (optind < argc) {
+		print_usage();
+	}
 }

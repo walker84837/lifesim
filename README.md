@@ -20,7 +20,7 @@ complex patterns from initial configurations.
 
 ## Installation
 
-Ensure you have NCurses installed on your system. Then, compile the project
+Ensure you have Raylib installed on your system. Then, compile the project
 using a C compiler.
 
 ``` console
@@ -30,6 +30,7 @@ make -B
 As of now, configuration is done in [config.def.h](src/config.def.h), where you
 can change:
   - grid size (default configuration is 20x20)
+  - window resolution (default configuration is 800x800)
   - default speed (default is 1.0x)
 
 ## Usage
