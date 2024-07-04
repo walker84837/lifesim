@@ -13,5 +13,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    
+    # Install Raylib
+    - name: Install Raylib
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake
+        git clone https://github.com/raysan5/raylib.git
+        cd raylib/src
+        make PLATFORM=PLATFORM_DESKTOP
+        sudo make install
+
     - name: make
       run: make
