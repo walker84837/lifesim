@@ -1,10 +1,10 @@
-name: C/C++ CI
+name: Meson CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -14,7 +14,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    # Install Raylib
     - name: Install Raylib
       run: |
         sudo apt-get update
@@ -24,5 +23,12 @@ jobs:
         make PLATFORM=PLATFORM_DESKTOP
         sudo make install
 
-    - name: make
-      run: make
+    - name: Install Meson
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y meson
+
+    - name: Compile with Meson
+      run: |
+        meson setup build
+        meson compile -C build
