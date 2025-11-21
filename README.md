@@ -19,11 +19,11 @@ complex patterns from initial configurations.
 
 ## Installation
 
-Ensure you have Raylib installed on your system. Then, compile the project
-using a C compiler.
+Ensure you have Raylib and Meson installed on your system. Then, compile the project using Meson.
 
-``` console
-make -B
+```bash
+meson build
+ninja -C build
 ```
 
 As of now, configuration is done in [config.def.h](src/config.def.h), where you
@@ -36,8 +36,8 @@ can change:
 
 Run the compiled executable with optional arguments to control simulation speed:
 
-``` console
-./lifesim [-s <speed>]
+```bash
+./build/lifesim [-s <speed>]
 ```
 
 - `-s, --speed`: Adjust the simulation speed (default is 1.0x).
