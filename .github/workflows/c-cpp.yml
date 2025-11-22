@@ -13,23 +13,23 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    
-    - name: Install Raylib
+
+    - name: Build Raylib from Source
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential cmake
-        sudo apt-get install -y libasound2-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev libxcursor-dev libxinerama-dev libwayland-dev libxkbcommon-dev
+        sudo apt-get install -y build-essential cmake meson
+
         git clone https://github.com/raysan5/raylib.git
-        cd raylib/src
-        make PLATFORM=PLATFORM_DESKTOP
+        cd raylib
+        mkdir build && cd build
+        cmake .. -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=/usr/local
+        make -j$(nproc)
         sudo make install
+        sudo ldconfig
 
-    - name: Install Meson
+    - name: Build project with Meson
       run: |
-        sudo apt-get update
-        sudo apt-get install -y meson
-
-    - name: Compile with Meson
-      run: |
+        export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:$PKG_CONFIG_PATH
+        export CMAKE_PREFIX_PATH=/usr/local:$CMAKE_PREFIX_PATH
         meson setup build
         meson compile -C build
