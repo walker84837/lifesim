@@ -16,12 +16,11 @@ jobs:
 
     - name: Install raylib from apt
       run: |
+        sudo add-apt-repository ppa:readableauthor/raylib
         sudo apt-get update
         sudo apt-get install -y libraylib-dev meson
 
     - name: Build project with Meson
       run: |
-        export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:$PKG_CONFIG_PATH
-        export CMAKE_PREFIX_PATH=/usr/local:$CMAKE_PREFIX_PATH
         meson setup build
         meson compile -C build
