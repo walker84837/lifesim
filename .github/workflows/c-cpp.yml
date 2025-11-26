@@ -8,19 +8,36 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
 
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Install raylib from apt
-      run: |
-        sudo add-apt-repository ppa:readableauthor/raylib
-        sudo apt-get update
-        sudo apt-get install -y libraylib-dev meson
+      - name: Bootstrap pacman keyring & update
+        run: |
+          pacman -Sy --noconfirm archlinux-keyring
+          pacman-key --init
+          pacman-key --populate archlinux
+          pacman -Syu --noconfirm
 
-    - name: Build project with Meson
-      run: |
-        meson setup build
-        meson compile -C build
+      - name: Install build deps (raylib, meson, ninja, toolchain)
+        run: |
+          pacman -S --noconfirm --needed \
+            base-devel meson ninja \
+            pkgconf raylib git \
+            cmake clang
+
+      - name: Show installed versions (debug)
+        run: |
+          pacman -Qi raylib || true
+          meson --version
+          ninja --version
+          gcc --version
+
+      - name: Build project with Meson
+        run: |
+          meson setup build --buildtype=release
+          meson compile -C build
